@@ -1,54 +1,37 @@
-from http.server import HTTPServer, BaseHTTPRequestHandler
-#import socketserver
-#import argparse
+from flask import Flask, jsonify
 
-HOST = '192.168.69.1'
-PORT = 420
-Handler = http.server.SimpleHTTPRequestHandler
+class Baddel:
+    def __init__(self):
+        self.hoho = 'ehehe'
 
-class snek(BaseHTTPRequestHandler):
-    def do_HEAD(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/json')
-        self.end_headers()
+    def rekt(self):
+        return 'ownd'
+    def ownd(self):
+        return self.hoho
 
-    def do_GET(self):
-        paths = {
-            '/foo': {'status': 200},
-            '/bar': {'status': 302},
-            '/baz': {'status': 404},
-            '/qux': {'status': 500}
-        }
+def base():
+    return 'Hey'
 
-        if self.path in paths:
-            self.respond(paths[self.path])
-        else:
-            self.respond({'status': 500})
+def hi():
+    return 'Hi There...'
 
-    def handle_http(self, status_code, path):
-        self.send_response(status_code)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        content = '''
-        <html><head><title>Title goes here.</title></head>
-        <body><p>This is a test.</p>
-        <p>You accessed path: {}</p>
-        </body></html>
-        '''.format(path)
-        return bytes(content, 'UTF-8')
+def plus(num, pls):
+    ans = num + pls
+    return str(ans)
 
-    def respond(self, opts):
-        response = self.handle_http(opts['status'], self.path)
-        self.wfile.write(response)
+app = Flask(__name__)
 
-if __name__ == '__main__':
-    server_class = HTTPServer
-    httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler)
-    print(time.asctime(), 'Server Starts - %s:%s' % (HOST_NAME, PORT_NUMBER))
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        pass
-    httpd.server_close()
-    print(time.asctime(), 'Server Stops - %s:%s' % (HOST_NAME, PORT_NUMBER))
+b = Baddel()
+
+app.add_url_rule('/ownd', 'Ownd', (lambda: b.ownd()))
+app.add_url_rule('/rekt', 'Rekd', (lambda: b.rekt()))
+
+app.add_url_rule('/', 'Home', (lambda: base()))
+app.add_url_rule('/hi', 'Hi', (lambda: hi()))
+app.add_url_rule('/plus/<int:num>/<int:pls>', 'Add',
+        (lambda num, pls: plus(num, pls)))
+
+if __name__ == "__main__":
+    app.run(host='192.168.69.1', port=42069)
+
 
