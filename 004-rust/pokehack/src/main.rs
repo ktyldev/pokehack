@@ -8,6 +8,7 @@ use std::io::Write;
 use std::convert::TryInto;
 
 use serde::{Serialize, Serializer};
+use serde_json::json;
 
 use rand::Rng;
 
@@ -64,10 +65,19 @@ impl Pokemon {
                 .try_into()
                 .unwrap();
 
+            let mv = &moves[index as usize];
+            let move_url = &mv["move"]["url"].to_string();
+            let split: Vec<&str> = move_url.split("/").collect();
+
+            // they dont call it a hackathon for nowt
+            let abs_move_index = split[split.len() - 2]
+                .parse::<u16>()
+                .unwrap();
+
             // check index hasn't already been picked
             let mut ok = true;
             for i in 0..NUM_MOVES {
-                if self.moves[i].index == index {
+                if self.moves[i].index == abs_move_index {
                     ok = false;
                     break;
                 }
@@ -75,7 +85,7 @@ impl Pokemon {
 
             // add to results
             if ok {
-                self.moves[count].index = index;
+                self.moves[count].index = abs_move_index;
                 count += 1;
             }
         }
@@ -94,8 +104,9 @@ impl Pokemon {
         println!("{}! use {}!", self.name, move_names[choice as usize]);
 
         // send move to server
+        self.moves[choice as usize].send();
 
-        // handle response from round of battle
+        // TODO: handle response from round of battle
 
         true
     }
@@ -128,6 +139,21 @@ impl Move {
         }
 
         String::new()
+    }
+
+    // TODO: receive battle state
+    fn send(self: &Move) {
+        let url = format!("{}{}", GAME_SERVER, "/move");
+        
+        let data = json!({
+            "name": "",
+            "i": 1
+        }).to_string();
+
+        match post(&url, &data) {
+            Ok(response) => println!("{}", response),
+            _ => println!("Error posting move")
+        };
     }
 }
 
@@ -176,14 +202,12 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-
 fn join_battle(data: &str) -> bool {
     let url = format!("{}{}", GAME_SERVER, "/joinson");
 
     match post(&url, data) {
         Ok(response) => {
             println!("{}", response);
-
         },
         Err(e) => println!("{}", e)
     }
