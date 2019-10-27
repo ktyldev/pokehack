@@ -18,7 +18,7 @@ const NUM_MOVES:    usize   = 4;
 #[derive(Clone, Serialize)]
 struct Pokemon {
     pkmn:       u16,
-    nickname:   String,
+    name:   String,
     moves:      [Move; NUM_MOVES],
     level:      u32
 }
@@ -27,12 +27,14 @@ impl Pokemon {
     fn new() -> Self {
         Pokemon {
             pkmn:       4,
-            nickname:   String::new(),
+            name:   String::new(),
             moves:      [Move::new(); NUM_MOVES],
             level:      420
         }
     }
 }
+
+
 
 #[derive(Copy, Clone)]
 struct Move {
@@ -74,12 +76,12 @@ impl Serialize for Move {
 
 fn main() -> io::Result<()> {
     let mut pokemon = Pokemon::new();
-    pokemon.nickname = get_nickname();
+    pokemon.name = get_nickname();
 
-    println!("Say hi to {}!", pokemon.nickname);
+    println!("Say hi to {}!", pokemon.name);
 
     get_moves(&mut pokemon);
-    println!("{}'s moves: ", pokemon.nickname);
+    println!("{}'s moves: ", pokemon.name);
     for i in 0..NUM_MOVES {
         println!("{}", pokemon.moves[i].name())
     }
