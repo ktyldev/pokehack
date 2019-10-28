@@ -30,10 +30,12 @@ type_matchups = {'normal':[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 0, 1, 1, 0.5
 
 class Muve:
     def __init__(self, moveId):
+        # Set up moves on player join
         move = dex.get_move(moveId)
 
 class Pokeman:
     def __init__(self, pkmnId):
+        # Set up pokemon on player join
         pkmn = dex.get_pokemon(pkmnId)
 
 class Baddel:
@@ -120,33 +122,35 @@ class Baddel:
 
             elif name == self.two['name']:
 
-                dudududududuel(self.two['name'])
+                dmg(pTwo, pOne, <move>)
+
+            else:
+                return 'jog on'
 
 
     def dmg(self, p, po, m):
-        '''
-            Damage = ((((2 * Level / 5 + 2) * AttackStat * AttackPower /\
-                    DefenseStat) / 50) + 2) * STAB * Weakness/Resistance *\
-                    RandomNumber / 100
-        '''
         
-        # STAB if m.type == p.type[s] 1.5
-
-
         STAB = 1
         TYPE = 1
 
+        # STAB if m.type == p.type[s] 1.5
         for t in p.pkmn.types:
             if t.type.name == m.type.name:
                 STAB = 1.5
 
+        # Needs to be revised
         for t in p.pkmn.types:
             for i in range(type_lookup):
                 if t.type.name == type_lookup:
                     n = i
                     break
-            TYPE *= type_matchup[m.type.name, n]
+                TYPE *= type_matchup[m.type.name, n]
 
+        '''
+            Damage = ((((2 * Level / 5 + 2) * AttackStat * AttackPower /\
+                    DefenseStat) / 50) + 2) * STAB * Weakness/Resistance *\
+                    RandomNumber / 100
+        '''
 
 
         dmg = ((((2 * p.lvl / 5 + 2) * p.pkmn.stats[4].base_stat * m.move.power /\
