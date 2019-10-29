@@ -4,13 +4,12 @@ Made for Hack:Brunel hackathon
 
 Networked Pokémon game using the [PokéAPI](https://pokeapi.co/), for fun!
 
-Write clients to consume or provide 
+Write clients to consume or provide this API to have networked Pokémon battles in a variety of languages.
 
 ## TODO
 
 *   Replace title of readme with ASCII art
 *   Define `/battle` get route
-*   License
 
 *   Turn all these points into issues on the repo
 
