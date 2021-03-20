@@ -8,7 +8,7 @@ Flask==1.1.1
 idna==2.8
 inflect==0.2.5
 itsdangerous==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 pokepy==0.6.0
 requests==2.21.0
